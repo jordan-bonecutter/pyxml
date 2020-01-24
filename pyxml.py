@@ -1,7 +1,8 @@
-#
-#
-#
-#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# pyxml.py  # # # # # # # # # # # # # # # # # # # # # # #
+# created by jordan bonecutter  # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 class xml_element:
@@ -45,6 +46,8 @@ class xml_element:
     # add the children
     for child in self.children:
       ret += child.dumps(indent + '  ')
+
+    ret += indent + '</' + self.name + '>'
 
     return ret
 
