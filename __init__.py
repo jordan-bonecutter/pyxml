@@ -1,2 +1,2 @@
-from pyxml import xml_element
-from pyxml import xml_tree
+from .pyxml import xml_element
+from .pyxml import xml_tree
