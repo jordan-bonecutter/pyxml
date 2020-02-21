@@ -126,13 +126,13 @@ class xml_tree:
         # read until value
         if data[r_i] == '=':
           r_i += 1
-          while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+          while data[r_i].isspace():
             r_i += 1
         else:
           while data[r_i] != '=':
             r_i += 1
           r_i += 1
-          while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+          while data[r_i].isspace():
             r_i += 1
 
         # read value
@@ -154,7 +154,7 @@ class xml_tree:
     # read in the tree
     while True:
       # read in whitespace
-      while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+      while data[r_i].isspace():
         if r_i == len(data) - 1:
           if len(element_stack) > 0:
             raise RuntimeError('XML error: incomplete xml file')
@@ -171,6 +171,19 @@ class xml_tree:
       # ignore comments
       if data[r_i+1:r_i+4] == '!--':
         while data[r_i-3:r_i] != '-->':
+          r_i += 1
+        continue
+
+      #ignore !DOCTYPE
+      if data[r_i+1:r_i+9] == '!DOCTYPE':
+        qstate = ''
+        while True:
+          if (data[r_i] == '"' or data[r_i] == '\'') and qstate == '':
+            qstate = data[r_i]
+          elif qstate != '' and data[r_i] == qstate:
+            qstate = ''
+          elif data[r_i] == '>' and qstate == '':
+            break
           r_i += 1
         continue
   
@@ -193,7 +206,7 @@ class xml_tree:
       # new element
       # read element name
       ename = ''
-      while data[r_i] != ' ' and data[r_i] != '\n' and data[r_i] != '\t' and data[r_i] != '/' and data[r_i] != '>':
+      while (not data[r_i].isspace()) and data[r_i] != '/' and data[r_i] != '>':
         ename += data[r_i] 
         r_i += 1
     
@@ -213,7 +226,7 @@ class xml_tree:
       attributes = {}
       while True:
         # read whitespace
-        while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+        while data[r_i].isspace():
           r_i += 1
 
         # end of attributes
@@ -230,20 +243,20 @@ class xml_tree:
 
         # read attribute name
         attr_name = ''
-        while data[r_i] != ' ' and data[r_i] != '\n' and data[r_i] != '\t' and data[r_i] != '=':
+        while (not data[r_i].isspace()) and data[r_i] != '=':
           attr_name += data[r_i] 
           r_i += 1
 
         # read until value
         if data[r_i] == '=':
           r_i += 1
-          while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+          while data[r_i].isspace():
             r_i += 1
         else:
           while data[r_i] != '=':
             r_i += 1
           r_i += 1
-          while data[r_i] == ' ' or data[r_i] == '\n' or data[r_i] == '\t':
+          while data[r_i].isspace():
             r_i += 1
 
         # read value
@@ -264,7 +277,7 @@ class xml_tree:
 
 
 def main() -> int:
-  with open('test.xml', 'r') as testfile:
+  with open('test2.xml', 'r') as testfile:
     test = xml_tree.fromFile(testfile)
   with open('testout.xml', 'w') as testout:
     test.dump(testout)
