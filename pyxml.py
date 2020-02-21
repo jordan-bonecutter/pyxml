@@ -158,7 +158,7 @@ class xml_tree:
         if r_i == len(data) - 1:
           if len(element_stack) > 0:
             raise RuntimeError('XML error: incomplete xml file')
-          return cls(root.children, prolog)
+          return cls(root, prolog)
         r_i += 1
 
       # read element content
