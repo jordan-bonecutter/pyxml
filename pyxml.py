@@ -18,10 +18,6 @@ class xml_element:
     self._parent    = parent
 
 
-  def __eq__(self, other):
-    return self.name == other.name and self.attributes == other.attributes and self.content == other.content
-
-
   def dumps(self, indent=''):
     # setup return string
     ret = indent + '<' + self.name
